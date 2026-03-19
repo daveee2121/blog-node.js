@@ -1,4 +1,14 @@
-const BASE_URL = 'http://localhost:4000/api/posts'
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/posts`
+
+export async function getAllPosts() {
+  const res = await fetch(BASE_URL)
+  return res.json()
+}
+
+export async function getPostById(id: string) {
+  const res = await fetch(`${BASE_URL}/${id}`)
+  return res.json()
+}
 
 export async function createPost(title: string, content: string) {
   return fetch(BASE_URL, {

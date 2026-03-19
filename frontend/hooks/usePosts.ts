@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getAllPosts } from '@/lib/api/posts.api'
 
 type Post = {
   id: number
@@ -13,8 +14,7 @@ export function usePosts() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/posts')
-      .then(r => r.json())
+    getAllPosts()
       .then(setPosts)
       .catch(() => setError('Fehler beim Laden'))
       .finally(() => setLoading(false))
