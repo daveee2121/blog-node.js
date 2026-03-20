@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getPostById } from '@/lib/api/posts.api'
-
-type Post = {
-  id: number
-  title: string
-  content: string
-  createdAt: string
-}
+import type { Post } from '@/types/post'
 
 export function usePost(id: string) {
   const [post, setPost] = useState<Post | null>(null)
