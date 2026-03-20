@@ -12,7 +12,7 @@ export default function Navbar() {
   const pathname = usePathname()
 
   return (
-    <header className="border-b bg-background sticky top-0 z-50">
+    <header className="border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="font-semibold text-lg tracking-tight">
           myBlog
