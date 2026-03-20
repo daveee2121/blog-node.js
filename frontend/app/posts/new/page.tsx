@@ -1,6 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { createPost } from '@/lib/api/posts.api'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -16,19 +20,25 @@ export default function NewPostPage() {
   }
 
   return (
-    <main>
-      <h1>Neuer Post</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Titel</label>
-          <input name="title" required />
+    <div className="flex flex-col gap-6 max-w-xl">
+      <h1 className="text-2xl font-bold tracking-tight">Neuer Post</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="title">Titel</Label>
+          <Input id="title" name="title" placeholder="Titel des Posts" required />
         </div>
-        <div>
-          <label>Inhalt</label>
-          <textarea name="content" required />
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="content">Inhalt</Label>
+          <Textarea
+            id="content"
+            name="content"
+            placeholder="Schreibe deinen Post..."
+            className="min-h-40 resize-none"
+            required
+          />
         </div>
-        <button type="submit">Erstellen</button>
+        <Button type="submit" className="self-start">Erstellen</Button>
       </form>
-    </main>
+    </div>
   )
 }

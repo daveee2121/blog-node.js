@@ -1,29 +1,43 @@
 'use client'
 import Link from 'next/link'
 import { usePosts } from '@/hooks/usePosts'
+import { buttonVariants } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 
 export default function PostsPage() {
   const { posts, loading, error } = usePosts()
 
-  if (loading) return <p>Laden...</p>
-  if (error) return <p>{error}</p>
+  if (loading) return <p className="text-muted-foreground">Laden...</p>
+  if (error) return <p className="text-destructive">{error}</p>
 
   return (
-    <main>
-      <h1>Posts</h1>
-      <Link href="/posts/new">Neuer Post</Link>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight">Blog</h1>
+        <Link href="/posts/new" className={buttonVariants()}>Neuer Post</Link>
+      </div>
+
       {posts.length === 0 ? (
-        <p>Noch keine Posts vorhanden.</p>
+        <p className="text-muted-foreground">Noch keine Posts vorhanden.</p>
       ) : (
-        posts.map(post => (
-          <div key={post.id}>
-            <Link href={`/posts/${post.id}`}>
-              <h2>{post.title}</h2>
+        <div className="flex flex-col gap-4">
+          {posts.map(post => (
+            <Link key={post.id} href={`/posts/${post.id}`}>
+              <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="text-lg">{post.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm line-clamp-2">{post.content}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {new Date(post.createdAt).toLocaleDateString('de-DE')}
+                  </p>
+                </CardContent>
+              </Card>
             </Link>
-            <p>{post.content}</p>
-          </div>
-        ))
+          ))}
+        </div>
       )}
-    </main>
+    </div>
   )
 }
