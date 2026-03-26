@@ -21,4 +21,6 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+// buttonVariants wird NICHT re-exportiert — importiere es direkt aus
+// @/components/ui/button-variants, sonst schlägt der Import in Server Components fehl
+export { Button }

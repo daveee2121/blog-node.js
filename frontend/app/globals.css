@@ -122,9 +122,29 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Grid-Linien mit currentColor damit es im Dark Mode automatisch weiß wird */
     background-image:
-      linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Sehr niedrige Opacity damit das Grid subtil bleibt */
+    --tw-bg-opacity: 1;
+    background-blend-mode: normal;
+  }
+  /* Grid-Farbe im Light Mode */
+  :root body {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  /* Grid-Farbe im Dark Mode */
+  .dark body {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 32px 32px;
   }
   html {
