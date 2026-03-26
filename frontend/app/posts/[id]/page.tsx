@@ -1,22 +1,13 @@
-'use client'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
-import { usePost } from '@/hooks/usePost'
-import { deletePost } from '@/lib/api/posts.api'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { getPostById } from '../api'
+import { deletePostAction } from '../actions'
+import { buttonVariants } from '@/components/ui/button-variants'
 
-export default function PostDetailPage() {
-  const { id } = useParams()
-  const router = useRouter()
-  const { post, loading, error } = usePost(id as string)
+// Server Component — params ist in Next.js 15+ ein Promise
+export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const post = await getPostById(id)
 
-  async function handleDelete() {
-    await deletePost(id as string)
-    router.push('/posts')
-  }
-
-  if (loading) return <p className="text-muted-foreground">Laden...</p>
-  if (error) return <p className="text-destructive">{error}</p>
   if (!post) return <p className="text-muted-foreground">Post nicht gefunden.</p>
 
   return (
@@ -33,7 +24,13 @@ export default function PostDetailPage() {
       <div className="flex items-center gap-2 pt-4 border-t">
         <Link href="/posts" className={buttonVariants({ variant: 'outline' })}>Zurück</Link>
         <Link href={`/posts/${id}/edit`} className={buttonVariants({ variant: 'outline' })}>Bearbeiten</Link>
-        <Button variant="destructive" onClick={handleDelete}>Löschen</Button>
+
+        {/* Delete via Server Action — kein onClick, kein 'use client' nötig */}
+        <form action={deletePostAction.bind(null, id)}>
+          <button type="submit" className={buttonVariants({ variant: 'destructive' })}>
+            Löschen
+          </button>
+        </form>
       </div>
     </div>
   )

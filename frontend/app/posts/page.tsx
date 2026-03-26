@@ -1,14 +1,11 @@
-'use client'
 import Link from 'next/link'
-import { usePosts } from '@/hooks/usePosts'
-import { buttonVariants } from '@/components/ui/button'
+import { getAllPosts } from './api'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 
-export default function PostsPage() {
-  const { posts, loading, error } = usePosts()
-
-  if (loading) return <p className="text-muted-foreground">Laden...</p>
-  if (error) return <p className="text-destructive">{error}</p>
+// Server Component — kein 'use client', kein Hook, Daten direkt vom Server geladen
+export default async function PostsPage() {
+  const posts = await getAllPosts()
 
   return (
     <div className="flex flex-col gap-6">

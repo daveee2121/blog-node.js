@@ -1,48 +1,51 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { getAllPosts, getPostById, createPost, updatePost, deletePost } from '../services/post.service'
+import { CreatePostDto, UpdatePostDto } from '../dtos/post.dto'
 
-export async function getAll(req: Request, res: Response) {
+export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const posts = await getAllPosts()
     res.json(posts)
-  } catch {
-    res.status(500).json({ error: 'Fehler beim Laden der Posts' })
+  } catch (err) {
+    next(err)  // → weiter an errorHandler Middleware
   }
 }
 
-export async function getOne(req: Request, res: Response) {
+export async function getOne(req: Request, res: Response, next: NextFunction) {
   try {
-    const post = await getPostById(parseInt(req.params.id as string))
-    if (!post) return res.status(404).json({ error: 'Not found' })
+    const post = await getPostById(parseInt(req.params.id))
+    if (!post) return res.status(404).json({ error: 'Post nicht gefunden' })
     res.json(post)
-  } catch {
-    res.status(500).json({ error: 'Fehler beim Laden des Posts' })
+  } catch (err) {
+    next(err)
   }
 }
 
-export async function create(req: Request, res: Response) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const post = await createPost(req.body.title, req.body.content)
+    const { title, content }: CreatePostDto = req.body
+    const post = await createPost(title, content)
+    res.status(201).json(post)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { title, content }: UpdatePostDto = req.body
+    const post = await updatePost(parseInt(req.params.id), title, content)
     res.json(post)
-  } catch {
-    res.status(500).json({ error: 'Fehler beim Erstellen des Posts' })
+  } catch (err) {
+    next(err)
   }
 }
 
-export async function update(req: Request, res: Response) {
+export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
-    const post = await updatePost(parseInt(req.params.id as string), req.body.title, req.body.content)
-    res.json(post)
-  } catch {
-    res.status(500).json({ error: 'Fehler beim Aktualisieren des Posts' })
-  }
-}
-
-export async function remove(req: Request, res: Response) {
-  try {
-    await deletePost(parseInt(req.params.id as string))
-    res.json({ success: true })
-  } catch {
-    res.status(500).json({ error: 'Fehler beim Löschen des Posts' })
+    await deletePost(parseInt(req.params.id))
+    res.status(204).send()
+  } catch (err) {
+    next(err)
   }
 }

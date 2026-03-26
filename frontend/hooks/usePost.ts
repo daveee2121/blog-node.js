@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getPostById } from '@/lib/api/posts.api'
+import { getPostById } from '@/app/posts/api'
 import type { Post } from '@/types/post'
 
+// Nützlich für Client Components die einen einzelnen Post reaktiv laden brauchen
 export function usePost(id: string) {
   const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)

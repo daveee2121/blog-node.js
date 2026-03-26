@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { getAllPosts } from '@/lib/api/posts.api'
+import { getAllPosts } from '@/app/posts/api'
 import type { Post } from '@/types/post'
 
+// Nützlich für Client Components die Posts reaktiv laden brauchen
+// (z.B. mit Suche, Filter, Live-Reload nach User-Aktion)
 export function usePosts() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { buttonVariants } from '@/lib/button-variants'
+import { buttonVariants } from '@/components/ui/button-variants'
 
 export default function Home() {
   return (

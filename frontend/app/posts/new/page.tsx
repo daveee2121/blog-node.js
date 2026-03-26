@@ -1,28 +1,15 @@
-'use client'
-import { useRouter } from 'next/navigation'
-import { createPost } from '@/lib/api/posts.api'
+import { createPostAction } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
+// Server Component — form action zeigt direkt auf Server Action
 export default function NewPostPage() {
-  const router = useRouter()
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    await createPost(
-      formData.get('title') as string,
-      formData.get('content') as string
-    )
-    router.push('/posts')
-  }
-
   return (
     <div className="flex flex-col gap-6 max-w-xl">
       <h1 className="text-2xl font-bold tracking-tight">Neuer Post</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form action={createPostAction} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">Titel</Label>
           <Input id="title" name="title" placeholder="Titel des Posts" required />
